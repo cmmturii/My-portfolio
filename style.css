@@ -89,7 +89,7 @@ body.light .panel::before {
 ═══════════════════════════════════════════════════ */
 header {
   position: fixed; top:0; left:0; width:100%; z-index:1000;
-  padding: 8px 6%;
+  padding: 14px 6%;
   display: flex; justify-content:space-between; align-items:center;
   background: var(--nav-bg); backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
@@ -606,10 +606,186 @@ body.light .home-photo::after {
   position:fixed; bottom:0; left:0; right:0; z-index:998;
   background:var(--nav-bg); backdrop-filter:blur(10px);
   border-top:1px solid var(--border);
-  padding:.75rem 6%;
+  padding:.55rem 6%;
   display:flex; justify-content:space-between; align-items:center;
   font-size:.7rem; color:var(--muted);
   transition:background .4s;
 }
 .footer-strip a { color:var(--muted); text-decoration:none; transition:color .3s; }
 .footer-strip a:hover { color:var(--cyan); }
+
+
+/* ═══════════════════════════════════════════════════
+   MOBILE RESPONSIVE — full rewrite for screens ≤768px
+   The horizontal snap scroll becomes normal vertical
+   scroll on mobile so all panels stack naturally.
+═══════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* ── SCROLL TRACK: go vertical on mobile ── */
+  html, body { overflow: hidden auto; height: auto; }
+  #scroll-track {
+    flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: auto;
+    scroll-snap-type: none;   /* let panels flow normally */
+    width: 100%;
+  }
+
+  /* ── PANELS: full-width, auto height, vertical ── */
+  .panel {
+    flex: none;
+    width: 100%;
+    height: auto;
+    min-height: 100svh;
+    scroll-snap-align: none;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-top: 80px;       /* clear fixed header */
+    padding-bottom: 60px;    /* clear fixed footer */
+    overflow: visible;
+  }
+
+  /* hide side dots on mobile (no room) */
+  .nav-dots { display: none; }
+
+  /* ── HEADER: compact, wrap nav ── */
+  header {
+    padding: 10px 4%;
+    flex-wrap: wrap;
+    gap: .4rem;
+    height: auto;
+  }
+  .logo { font-size: 1.2rem; }
+  nav {
+    order: 3;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: .3rem;
+    padding-bottom: 6px;
+  }
+  .nav-btn { font-size: .68rem; padding: .35rem .75rem; }
+  .nav-right { margin-left: auto; }
+  .bb8-toggle { --toggle-size: 9px; }
+  .nav-cv { font-size: .68rem; padding: .35rem .75rem; }
+
+  /* ── PANEL 1 HOME ── */
+  #panel-home {
+    padding: 100px 5% 80px;
+    position: relative;
+  }
+  .home-photo {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100%;
+    z-index: 0;
+  }
+  .home-photo img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    filter: brightness(.35) saturate(.4) contrast(1.1);
+  }
+  /* stronger left gradient so text is always readable */
+  .home-photo::after {
+    background: linear-gradient(
+      180deg,
+      rgba(6,13,26,.7) 0%,
+      rgba(6,13,26,.55) 50%,
+      rgba(6,13,26,.8) 100%
+    ) !important;
+  }
+  .home-content {
+    position: relative;
+    z-index: 5;
+    max-width: 100%;
+  }
+  .home-content h3 { font-size: 1.1rem; }
+  .home-content h1 { font-size: clamp(2rem, 8vw, 2.8rem); }
+  .home-content p  { font-size: .88rem; max-width: 100%; }
+  .btn-row { flex-direction: column; gap: .75rem; }
+  .btn-hire, .btn-talk { width: 100%; text-align: center; padding: .8rem 1rem; font-size: .9rem; }
+
+  /* social icons — smaller, no reflection */
+  .home-sci {
+    position: relative;
+    bottom: auto; left: auto;
+    margin-top: 2rem;
+    z-index: 5;
+  }
+  .social-login-icons { -webkit-box-reflect: none; }
+  .social-icon-1,.social-icon-1-1,.social-icon-2,.social-icon-2-2,
+  .social-icon-3,.social-icon-3-3,.social-icon-4,.social-icon-4-4 {
+    width: 38px; height: 38px; margin: 14px 0 0;
+  }
+  .socialcontainer { height: 60px; }
+  .socialcontainer:hover .social-icon-1,
+  .socialcontainer:hover .social-icon-2,
+  .socialcontainer:hover .social-icon-3,
+  .socialcontainer:hover .social-icon-4 { transform: translateY(-52px); }
+
+  .scroll-hint { display: none; }
+
+  /* ── PANEL 2 ABOUT ── */
+  #panel-about { padding: 90px 5% 70px; }
+  .about-inner {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .stats-row { grid-template-columns: repeat(2,1fr); gap: .7rem; }
+  .stat-box { padding: .85rem; }
+  .stat-num { font-size: 1.5rem; }
+
+  /* ── PANEL 3 PORTFOLIO ── */
+  #panel-projects { padding: 90px 5% 70px; }
+  .proj-header { margin-bottom: .5rem; }
+  .slider-box { height: 280px; }
+  .slide-item:nth-child(3),
+  .slide-item:nth-child(4),
+  .slide-item:nth-child(5),
+  .slide-item:nth-child(n+6) { display: none; }  /* hide side cards on mobile */
+  .slide-content { padding: 1.2rem 1.4rem; }
+  .slide-content h3 { font-size: 1.3rem; }
+
+  /* ── PANEL 4 CONTACT ── */
+  #panel-contact { padding: 90px 5% 80px; }
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .form-inner { padding: 1.3rem; }
+  .send-btn-wrap { justify-content: stretch; }
+  .form-submit { width: 100%; justify-content: center; }
+
+  /* ── FOOTER ── */
+  .footer-strip {
+    position: fixed;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: .3rem;
+    padding: .5rem 4%;
+    font-size: .65rem;
+  }
+
+  /* ── SECTION LABELS / TITLES ── */
+  .sec-title { font-size: clamp(1.5rem, 6vw, 2rem); }
+
+  /* ── PANEL GRID LINES ── */
+  .panel::before { background-size: 40px 40px; }
+}
+
+/* ── EXTRA SMALL phones (≤390px) ── */
+@media (max-width: 390px) {
+  .home-content h1 { font-size: 1.8rem; }
+  .nav-btn { font-size: .62rem; padding: .3rem .6rem; }
+  .stats-row { grid-template-columns: 1fr 1fr; }
+}
+
+/* ── TABLET (769px – 1024px) ── */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .about-inner { gap: 2rem; }
+  .home-content h1 { font-size: clamp(2rem, 4vw, 3rem); }
+  .home-photo { width: 48%; }
+  .nav-btn { font-size: .72rem; padding: .38rem .82rem; }
+}
