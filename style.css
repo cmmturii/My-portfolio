@@ -89,7 +89,7 @@ body.light .panel::before {
 ═══════════════════════════════════════════════════ */
 header {
   position: fixed; top:0; left:0; width:100%; z-index:1000;
-  padding: 14px 6%;
+  padding: 8px 4%;
   display: flex; justify-content:space-between; align-items:center;
   background: var(--nav-bg); backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
