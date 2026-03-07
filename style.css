@@ -650,13 +650,14 @@ body.light .home-photo::after {
 
   /* ── HEADER: compact ── */
   header {
-    padding: 10px 4%;
+    padding: 8px 3%;
     flex-wrap: nowrap;
-    gap: .4rem;
+    gap: .3rem;
     height: auto;
     align-items: center;
+    justify-content: space-between;
   }
-  .logo { font-size: 1.2rem; flex-shrink: 0; }
+  .logo { font-size: 1.1rem; flex-shrink: 0; }
 
   /* ── NAV: always visible, horizontal, scrollable ── */
   nav {
@@ -669,23 +670,26 @@ body.light .home-photo::after {
     flex-direction: row !important;
     display: flex !important;
     padding: 0 !important;
-    gap: .2rem;
+    gap: .15rem;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;        /* hide scrollbar Firefox */
+    scrollbar-width: none;
     flex-wrap: nowrap;
     flex-shrink: 1;
     min-width: 0;
+    max-width: calc(100vw - 220px); /* leave room for logo + BB8 + CV */
   }
-  nav::-webkit-scrollbar { display: none; } /* hide scrollbar Chrome/Safari */
+  nav::-webkit-scrollbar { display: none; }
 
-  /* keep hamburger hidden — nav is always shown */
+  /* keep hamburger hidden */
   .hamburger { display: none !important; }
 
-  .nav-btn { font-size: .62rem; padding: .3rem .6rem; white-space: nowrap; }
-  .nav-right { margin-left: auto; flex-shrink: 0; }
-  .bb8-toggle { --toggle-size: 9px; }
-  .nav-cv { font-size: .68rem; padding: .35rem .75rem; }
+  .nav-btn { font-size: .6rem; padding: .28rem .55rem; white-space: nowrap; }
+
+  /* ── NAV RIGHT: shrink BB8 toggle significantly ── */
+  .nav-right { margin-left: auto; flex-shrink: 0; gap: .5rem; }
+  .bb8-toggle { --toggle-size: 7px; }   /* was 9px — smaller BB8 */
+  .nav-cv { font-size: .65rem; padding: .3rem .65rem; }
 
   /* ── PANEL 1 HOME ── */
   #panel-home {
@@ -844,13 +848,23 @@ body.light .home-photo::after {
 
 /* ═════════════════════════════════════
    PANEL TRANSITIONS
+   Panels are visible by default.
+   JS can add .animate-in for entrance effect,
+   but blank screens are avoided if JS fails.
 ═════════════════════════════════════ */
 .panel {
-  opacity: 0;
-  transform: translateY(40px);
+  opacity: 1;
+  transform: translateY(0);
   transition: opacity .6s ease, transform .6s ease;
 }
-.panel.active { opacity: 1; transform: translateY(0); }
+.panel.animate-in {
+  opacity: 0;
+  transform: translateY(40px);
+}
+.panel.animate-in.active {
+  opacity: 1;
+  transform: translateY(0);
+}
 
 /* ═════════════════════════════════════
    HIRE BADGE
