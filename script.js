@@ -168,3 +168,150 @@ function submitForm() {
   }, 2500);
   alert('Thanks ' + n + '! Christopher will reply to ' + em + ' shortly.');
 }
+{
+/* ── LOADING SCREEN ───────────────────── */
+
+window.addEventListener("load", () => {
+setTimeout(()=>{
+document.getElementById("loader").classList.add("hide");
+},1200);
+});
+
+
+/* ── PROGRESS BAR ───────────────────── */
+
+const progressBar = document.getElementById("progress-bar");
+
+function updateProgress(){
+const percent = (currentPanel/(panels.length-1))*100;
+progressBar.style.width = percent + "%";
+}
+
+
+/* update progress when navigating */
+
+const originalUpdateNav = updateNav;
+
+updateNav = function(idx){
+originalUpdateNav(idx);
+updateProgress();
+
+panels.forEach(p => p.classList.remove("active"));
+panels[idx].classList.add("active");
+};
+
+
+/* ── MOBILE MENU ───────────────────── */
+
+function toggleMenu(){
+document.querySelector("nav").classList.toggle("open");
+}
+
+
+/* activate first panel */
+
+panels[0].classList.add("active");
+updateProgress();
+}
+/* 3D HERO PARTICLES */
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000);
+
+const renderer = new THREE.WebGLRenderer({alpha:true});
+renderer.setSize(window.innerWidth,window.innerHeight);
+
+document.getElementById("hero-canvas").appendChild(renderer.domElement);
+
+const geometry = new THREE.BufferGeometry();
+const vertices = [];
+
+for(let i=0;i<1500;i++){
+
+const x = (Math.random()-0.5)*1000;
+const y = (Math.random()-0.5)*1000;
+const z = (Math.random()-0.5)*1000;
+
+vertices.push(x,y,z);
+
+}
+
+geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices,3));
+
+const material = new THREE.PointsMaterial({
+color:0x00ffff,
+size:2
+});
+
+const particles = new THREE.Points(geometry,material);
+
+scene.add(particles);
+
+camera.position.z = 400;
+
+function animateParticles(){
+
+requestAnimationFrame(animateParticles);
+
+particles.rotation.y += 0.0008;
+particles.rotation.x += 0.0004;
+
+renderer.render(scene,camera);
+
+}
+
+animateParticles();
+/* CURSOR GLOW */
+
+const glow = document.querySelector(".cursor-glow");
+
+document.addEventListener("mousemove",(e)=>{
+
+glow.style.left = e.clientX + "px";
+glow.style.top = e.clientY + "px";
+
+});
+/* MAGNETIC BUTTON */
+
+const magnets = document.querySelectorAll(".magnetic");
+
+magnets.forEach(btn=>{
+
+btn.addEventListener("mousemove",(e)=>{
+
+const rect = btn.getBoundingClientRect();
+
+const x = e.clientX - rect.left - rect.width/2;
+const y = e.clientY - rect.top - rect.height/2;
+
+btn.style.transform = `translate(${x*0.2}px, ${y*0.2}px)`;
+
+});
+
+btn.addEventListener("mouseleave",()=>{
+btn.style.transform="translate(0,0)";
+});
+
+});
+/* SCROLL REVEAL */
+
+const reveals = document.querySelectorAll(".reveal");
+
+window.addEventListener("scroll",()=>{
+
+reveals.forEach(el=>{
+
+const top = el.getBoundingClientRect().top;
+const trigger = window.innerHeight * 0.85;
+
+if(top < trigger){
+
+el.classList.add("active");
+
+}
+
+});
+
+});
+
+moveIndicator(active);
