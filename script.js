@@ -19,6 +19,30 @@ document.getElementById('themeToggle').addEventListener('change', function () {
   document.body.classList.toggle('light', this.checked);
 });
 
+/* ── HAMBURGER MENU (mobile) ───────────────────── */
+const hamburger = document.getElementById('hamburger');
+const mainNav   = document.getElementById('main-nav');
+if (hamburger && mainNav) {
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mainNav.classList.toggle('open');
+  });
+  /* Close nav when any link is tapped */
+  mainNav.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      mainNav.classList.remove('open');
+    });
+  });
+  /* Close nav when tapping outside */
+  document.addEventListener('click', (e) => {
+    if (!hamburger.contains(e.target) && !mainNav.contains(e.target)) {
+      hamburger.classList.remove('open');
+      mainNav.classList.remove('open');
+    }
+  });
+}
+
 /* ── PANEL NAVIGATION ──────────────────────────── */
 const track   = document.getElementById('scroll-track');
 const panels  = document.querySelectorAll('.panel');
@@ -29,14 +53,23 @@ let currentPanel = 0;
 function scrollToPanel(idx) {
   idx = Math.max(0, Math.min(panels.length - 1, idx));
 
+  /* Close mobile hamburger nav if open */
+  const hb  = document.getElementById('hamburger');
+  const nav = document.getElementById('main-nav');
+  if (hb && nav) {
+    hb.classList.remove('open');
+    nav.classList.remove('open');
+  }
+
   if (isMobile()) {
-    /* On mobile: panels stack vertically, scroll the window */
-    const target = panels[idx];
-    const headerH = document.querySelector('header').offsetHeight;
-    const top = target.getBoundingClientRect().top + window.scrollY - headerH;
-    window.scrollTo({ top, behavior: 'smooth' });
+    /* Small delay so nav collapses before scroll */
+    setTimeout(() => {
+      const target  = panels[idx];
+      const headerH = document.querySelector('header').offsetHeight;
+      const top     = target.getBoundingClientRect().top + window.scrollY - headerH;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }, 50);
   } else {
-    /* Desktop: horizontal snap scroll on #scroll-track */
     track.scrollTo({ left: idx * window.innerWidth, behavior: 'smooth' });
   }
   updateNav(idx);
